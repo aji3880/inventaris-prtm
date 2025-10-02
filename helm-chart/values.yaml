@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: registry.example.com/inventory-app
-  tag: latest
+  repository: image-registry.openshift-image-registry.svc:5000/inventory-app
+  tag: "0.0.1"
   pullPolicy: Always
 
 service:

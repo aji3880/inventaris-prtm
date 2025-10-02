@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         OCP_NAMESPACE = "inventaris-barang"
-        APP_NAME      = "inventory"
+        APP_NAME      = "inventory-app"
         IMAGE_TAG     = "0.0.1"
         OCP_NAME      = "https://api.cluster-djc54.dynamic.redhatworkshops.io:6443"
         OCP_TOKEN    = "sha256~2hEskbEVKsj11g3X62B7bBUfcfznJd48juTHY0oNXvs"
