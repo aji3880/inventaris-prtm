@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY composer.json composer.lock* /app/
 #RUN composer config -g github-oauth.github.com "" || true
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
+RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts --ignore-platform-reqs
 
 COPY . /app
 RUN composer dump-autoload -o
