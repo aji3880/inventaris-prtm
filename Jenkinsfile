@@ -57,13 +57,14 @@ pipeline {
                     if ! command -v helm &> /dev/null; then
                         curl -sSL https://get.helm.sh/helm-v3.14.4-linux-amd64.tar.gz -o helm.tar.gz
                         tar -zxvf helm.tar.gz
-                        mv linux-amd64/helm ${WORKSPACE}/helm
-                        chmod +x ./helm
-                        export PATH=\$PATH:\$(pwd)
+                        mkdir -p ${WORKSPACE}/bin
+                        mv linux-amd64/helm ${HELM_BIN}
+                        chmod +x ${HELM_BIN}
+                        export PATH=\$PATH:${WORKSPACE}/bin
                     else
                         echo "Helm is already installed"
                     fi
-                    ./helm version
+                    ${HELM_BIN} version
                     """
                 }
             }
