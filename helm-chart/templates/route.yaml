@@ -1,0 +1,16 @@
+{{- if .Values.ingress.host }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "inventory-app.fullname" . }}
+spec:
+  host: {{ .Values.ingress.host }}
+  to:
+    kind: Service
+    name: {{ include "inventory-app.fullname" . }}
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTermininationPolicy: None
+    termination: edge
+{{- end }}

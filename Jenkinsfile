@@ -5,8 +5,8 @@ pipeline {
         OCP_NAMESPACE = "inventaris-barang"
         APP_NAME      = "inventory"
         IMAGE_TAG     = "0.0.1"
-        OCP_NAME      = "https://api.cluster-lqscz.dynamic.redhatworkshops.io:6443"
-        OCP_TOKEN    = "sha256~iy8FmDO-WD3ozUlEGFZ4JM6NcJ2FcFcH8Mn1qaP4kNk"
+        OCP_NAME      = "https://api.cluster-djc54.dynamic.redhatworkshops.io:6443"
+        OCP_TOKEN    = "sha256~2hEskbEVKsj11g3X62B7bBUfcfznJd48juTHY0oNXvs"
         HELM_CHART_PATH = "helm-chart/"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
     }
@@ -64,15 +64,38 @@ pipeline {
             }
         }
 
+        stage('Deploy MySQL') {
+            steps {
+                sh """
+                ${HELM_BIN} repo add bitnami https://charts.bitnami.com/bitnami || true
+                ${HELM_BIN} repo update
+
+                ${HELM_BIN} upgrade --install ${MYSQL_RELEASE} ${MYSQL_CHART} \
+                  --version ${MYSQL_VERSION} \
+                  --namespace ${OCP_NAMESPACE} --create-namespace \
+                  --set auth.rootPassword=admin123 \
+                  --set auth.database=${APP_NAME}_db \
+                  --set auth.username=${APP_NAME}_user \
+                  --set auth.password=pass123 \
+                  --set primary.persistence.size=1Gi
+                """
+            }
+        }
+
         stage('deploy helm') {
             steps {
                 script {
                     sh """
                     ./helm lint ./helm-chart
                     ./helm upgrade --install ${APP_NAME} ./helm-chart --namespace ${OCP_NAMESPACE} \
+                        --namespace ${OCP_NAMESPACE} --create-namespace \
                         --set serviceAccount.create=true \
                         --set image.repository=${IMAGE_REPO} \
-                        --set image.tag=${IMAGE_TAG}
+                        --set image.tag=${IMAGE_TAG} \
+                        --set env.DB_HOST=${MYSQL_RELEASE}.${OCP_NAMESPACE}.svc.cluster.local \
+                        --set env.DB_DATABASE=${APP_NAME}_db \
+                        --set env.DB_USERNAME=${APP_NAME}_user \
+                        --set env.DB_PASSWORD=pass123
                     ./helm template ${APP_NAME} ./helm-chart --namespace ${OCP_NAMESPACE} \
                         --set image.repository=${IMAGE_REPO} \
                         --set image.tag=${IMAGE_TAG} > rendered.yaml
@@ -83,7 +106,7 @@ pipeline {
             }
         }
 
-        stage('rollout deployment') {
+        stage('rollout') {
             steps {
                 script {
                     sh """

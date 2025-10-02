@@ -1,0 +1,36 @@
+replicaCount: 1
+
+image:
+  repository: registry.example.com/inventory-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+#ingress:
+#  host: inventory-app.example.com
+#  tls: false
+
+resources:
+  limits: {}
+  requests: {}
+
+persistence:
+  enabled: true
+  storageClass: "ocs-external-storagecluster-ceph-rbd"
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+env:
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_KEY: "base64:$(openssl rand -base64 32)"
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_DATABASE: inventory
+  DB_USERNAME: user
+  DB_PASSWORD: pass
