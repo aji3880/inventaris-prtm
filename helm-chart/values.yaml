@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: image-registry.openshift-image-registry.svc:5000/inventory-app
+  repository: image-registry.openshift-image-registry.svc:5000/inventaris-barang/inventory-app
   tag: "0.0.1"
   pullPolicy: Always
 
