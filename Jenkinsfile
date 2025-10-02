@@ -10,6 +10,10 @@ pipeline {
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
+
+        MYSQL_RELEASE  = "mysql"       // nama release helm
+        MYSQL_CHART    = "bitnami/mysql"
+        MYSQL_VERSION  = "9.10.0"      // versi chart MySQL
     }
 
     stages {
@@ -53,7 +57,7 @@ pipeline {
                     if ! command -v helm &> /dev/null; then
                         curl -sSL https://get.helm.sh/helm-v3.14.4-linux-amd64.tar.gz -o helm.tar.gz
                         tar -zxvf helm.tar.gz
-                        mv linux-amd64/helm ./helm
+                        mv linux-amd64/helm ${WORKSPACE}/helm
                         chmod +x ./helm
                         export PATH=\$PATH:\$(pwd)
                     else
@@ -65,20 +69,20 @@ pipeline {
             }
         }
 
-        stage('Deploy MySQL') {
+       stage('Deploy MySQL') {
             steps {
                 sh """
                 ${HELM_BIN} repo add bitnami https://charts.bitnami.com/bitnami || true
                 ${HELM_BIN} repo update
 
                 ${HELM_BIN} upgrade --install ${MYSQL_RELEASE} ${MYSQL_CHART} \
-                  --version ${MYSQL_VERSION} \
-                  --namespace ${OCP_NAMESPACE} --create-namespace \
-                  --set auth.rootPassword=admin123 \
-                  --set auth.database=${APP_NAME}_db \
-                  --set auth.username=${APP_NAME}_user \
-                  --set auth.password=pass123 \
-                  --set primary.persistence.size=1Gi
+                --version ${MYSQL_VERSION} \
+                --namespace ${OCP_NAMESPACE} --create-namespace \
+                --set auth.rootPassword=admin123 \
+                --set auth.database=${APP_NAME}_db \
+                --set auth.username=${APP_NAME}_user \
+                --set auth.password=pass123 \
+                --set primary.persistence.size=1Gi
                 """
             }
         }
@@ -102,6 +106,9 @@ pipeline {
                         --set image.tag=${IMAGE_TAG} > rendered.yaml
                     cat rendered.yaml
                     oc apply -f rendered.yaml -n ${OCP_NAMESPACE}
+                    oc create secret generic ${APP_NAME}-app-key \
+                    --from-literal=APP_KEY=$(openssl rand -base64 32) \
+                    -n ${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
                     """
                 }
             }
@@ -111,7 +118,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    oc rollout restart deployment ${APP_NAME}-n ${OCP_NAMESPACE}
+                    oc rollout restart deployment/${APP_NAME} -n ${OCP_NAMESPACE}
                     """
                 }
             }
