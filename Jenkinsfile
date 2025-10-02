@@ -58,17 +58,18 @@ pipeline {
                         curl -sSL https://get.helm.sh/helm-v3.14.4-linux-amd64.tar.gz -o helm.tar.gz
                         tar -zxvf helm.tar.gz
                         mkdir -p ${WORKSPACE}/bin
-                        mv linux-amd64/helm ${WORKSPACE}/bin/
-                        chmod +x ${HELM_BIN}
+                        mv linux-amd64/helm ${WORKSPACE}/bin/helm
+                        chmod +x ${WORKSPACE}/bin/helm
                         export PATH=\$PATH:${WORKSPACE}/bin
                     else
                         echo "Helm is already installed"
                     fi
-                    ${HELM_BIN} version
+                    ${WORKSPACE}/bin/helm version
                     """
                 }
             }
         }
+
 
        stage('Deploy MySQL') {
             steps {
