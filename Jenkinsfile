@@ -8,6 +8,7 @@ pipeline {
         OCP_NAME      = "https://api.cluster-djc54.dynamic.redhatworkshops.io:6443"
         OCP_TOKEN    = "sha256~2hEskbEVKsj11g3X62B7bBUfcfznJd48juTHY0oNXvs"
         HELM_CHART_PATH = "helm-chart/"
+        HELM_BIN        = "${WORKSPACE}/bin/helm"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
     }
 
@@ -110,7 +111,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    oc rollout restart deployment ${APP_NAME}-${APP_NAME} -n ${OCP_NAMESPACE}
+                    oc rollout restart deployment ${APP_NAME}-n ${OCP_NAMESPACE}
                     """
                 }
             }
