@@ -106,9 +106,9 @@ pipeline {
                         --set image.tag=${IMAGE_TAG} > rendered.yaml
                     cat rendered.yaml
                     oc apply -f rendered.yaml -n ${OCP_NAMESPACE}
-                    oc create secret generic ${APP_NAME}-app-key \
-                    --from-literal=APP_KEY=$(openssl rand -base64 32) \
-                    -n ${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
+                    oc create secret generic \${APP_NAME}-app-key \
+                    --from-literal=APP_KEY=\$(openssl rand -base64 32) \
+                    -n \${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
                     """
                 }
             }
