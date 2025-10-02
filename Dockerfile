@@ -3,7 +3,7 @@ FROM composer:2 AS builder
 WORKDIR /app
 
 COPY composer.json composer.lock* /app/
-RUN composer config -g github-oauth.github.com "" || true
+#RUN composer config -g github-oauth.github.com "" || true
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
 COPY . /app
