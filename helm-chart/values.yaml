@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: registry.example.com/inventory-app
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: ClusterIP
