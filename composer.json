@@ -5,13 +5,13 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
-        "consoletvs/charts": "^7.3",
-        "guzzlehttp/guzzle": "^7.2",
-        "itsgoingd/clockwork": "^5.1",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7"
+    "php": "^8.0.2",
+    "arielmejiadev/larapex-charts": "^4.0",
+    "guzzlehttp/guzzle": "^7.2",
+    "itsgoingd/clockwork": "^5.1",
+    "laravel/framework": "^9.19",
+    "laravel/sanctum": "^3.0",
+    "laravel/tinker": "^2.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
