@@ -5,7 +5,7 @@ pipeline {
         OCP_NAMESPACE = "inventaris-barang"
         APP_NAME      = "inventory-app"
         IMAGE_TAG     = "0.0.1"
-        OCP_NAME      = "https://api.cluster-djc54.dynamic.redhatworkshops.io:6443"
+        OCP_NAME      = "https://api.cluster-twb92.dynamic.redhatworkshops.io:6443"
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
