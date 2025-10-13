@@ -6,7 +6,10 @@ pipeline {
         APP_NAME      = "inventory-app"
         IMAGE_TAG     = "0.0.1"
         OCP_NAME      = "https://api.cluster-djc54.dynamic.redhatworkshops.io:6443"
+<<<<<<< HEAD
         OCP_TOKEN    = "xxxxxxxxxxxxxxxs"
+=======
+>>>>>>> 64008ef (update parameter jenkinsfile)
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
@@ -25,13 +28,15 @@ pipeline {
 
         stage('login ocp') {
             steps {
-                sh """
-                oc login --token=${OCP_TOKEN} --server=${OCP_NAME} --insecure-skip-tls-verify=true
-                if ! oc get project ${OCP_NAMESPACE} >/dev/null 2>&1; then
-                    oc new-project ${OCP_NAMESPACE} --description="Project for ${APP_NAME}"
-                fi
-                oc project ${OCP_NAMESPACE}
-                """
+                withCredentials([usernamePassword(credentialsId: 'ocp-cred', usernameVariable: 'OCP_USER', passwordVariable: 'OCP_PASS')])
+                    sh """
+                    oc login -u ${OCP_USER} -p ${OCP_PASS} --server=${OCP_NAME} --insecure-skip-tls-verify=true
+                    if ! oc get project ${OCP_NAMESPACE} >/dev/null 2>&1; then
+                        oc new-project ${OCP_NAMESPACE} --description="Project for ${APP_NAME}"
+                    fi
+                    oc project ${OCP_NAMESPACE}
+                    """
+                }
             }
         }
 
