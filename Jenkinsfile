@@ -24,14 +24,13 @@ pipeline {
         stage('login ocp') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'ocp-cred', usernameVariable: 'OCP_USER', passwordVariable: 'OCP_PASS')]) {
-                        sh """
-                        oc login -u ${OCP_USER} -p ${OCP_PASS} --server=${OCP_NAME} --insecure-skip-tls-verify=true
-                        if ! oc get project ${OCP_NAMESPACE} >/dev/null 2>&1; then
-                            oc new-project ${OCP_NAMESPACE} --description="Project for ${APP_NAME}"
-                        fi
-                        oc project ${OCP_NAMESPACE}
-                        """
-                    }
+                    sh """
+                    oc login -u ${OCP_USER} -p ${OCP_PASS} --server=${OCP_NAME} --insecure-skip-tls-verify=true
+                    if ! oc get project ${OCP_NAMESPACE} >/dev/null 2>&1; then
+                        oc new-project ${OCP_NAMESPACE} --description="Project for ${APP_NAME}"
+                    fi
+                    oc project ${OCP_NAMESPACE}
+                    """
                 }
             }
         }
