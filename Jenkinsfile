@@ -6,10 +6,6 @@ pipeline {
         APP_NAME      = "inventory-app"
         IMAGE_TAG     = "0.0.1"
         OCP_NAME      = "https://api.cluster-djc54.dynamic.redhatworkshops.io:6443"
-<<<<<<< HEAD
-        OCP_TOKEN    = "xxxxxxxxxxxxxxxs"
-=======
->>>>>>> 64008ef (update parameter jenkinsfile)
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
