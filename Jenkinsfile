@@ -13,7 +13,6 @@ pipeline {
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
-
         MYSQL_RELEASE  = "mysql"       // nama release helm
         MYSQL_CHART    = "bitnami/mysql"
         MYSQL_VERSION  = "9.10.0"      // versi chart MySQL
