@@ -8,7 +8,7 @@ pipeline {
         OCP_NAME      = "https://api.cluster-f4k2h.dynamic.redhatworkshops.io:6443"
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
-        IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
+        IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}:${IMAGE_TAG}"
         MYSQL_RELEASE  = "mysql"       // nama release helm
         MYSQL_CHART    = "bitnami/mysql"
         MYSQL_VERSION  = "9.10.0"      // versi chart MySQL
@@ -135,7 +135,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    oc rollout restart deployment/${APP_NAME}-${APP_NAME} -n ${OCP_NAMESPACE}
+                    oc rollout restart deployment/inventory-app-inventory-app -n ${OCP_NAMESPACE}
                     """
                 }
             }
