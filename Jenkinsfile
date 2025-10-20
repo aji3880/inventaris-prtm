@@ -74,22 +74,23 @@ pipeline {
        stage('deploy MySQL') {
             steps {
                 timeout(time: 30, unit: 'MINUTES') {
-                    sh '''
+                    sh """
                     set -x
-                    ${HELM_BIN} repo add bitnami https://charts.bitnami.com/bitnami || true
-                    ${HELM_BIN} repo update
-                    ${HELM_BIN} upgrade --install ${MYSQL_RELEASE} ${MYSQL_CHART} \
-                        --version ${MYSQL_VERSION} \
-                        --namespace ${OCP_NAMESPACE} --create-namespace \
-                        --set auth.rootPassword=admin123 \
-                        --set auth.database=${APP_NAME}_db \
-                        --set auth.username=${APP_NAME}_user \
-                        --set auth.password=pass123 \
+                    ./bin/helm repo add bitnami https://charts.bitnami.com/bitnami || true
+                    ./bin/helm repo update
+                    ./bin/helm upgrade --install ${MYSQL_RELEASE} ${MYSQL_CHART} \\
+                        --version ${MYSQL_VERSION} \\
+                        --namespace ${OCP_NAMESPACE} --create-namespace \\
+                        --set auth.rootPassword=admin123 \\
+                        --set auth.database=${APP_NAME}_db \\
+                        --set auth.username=${APP_NAME}_user \\
+                        --set auth.password=pass123 \\
                         --set primary.persistence.size=1Gi
-                    '''
+                    """
                 }
             }
         }
+
 
 
         stage('deploy helm') {
