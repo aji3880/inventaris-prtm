@@ -70,25 +70,6 @@ pipeline {
             }
         }
 
-        stage('deploy MySQL') {
-            steps {
-                timeout(time: 30, unit: 'MINUTES') {
-                    sh """
-                    set -x
-                    ./bin/helm pull oci://registry-1.docker.io/bitnamicharts/mysql --version 14.0.3
-                    ./bin/helm upgrade --install ${MYSQL_RELEASE} mysql-14.0.3.tgz \
-                        --namespace ${OCP_NAMESPACE} --create-namespace \
-                        --set auth.rootPassword=admin123 \
-                        --set auth.database=${APP_NAME}_db \
-                        --set auth.username=${APP_NAME}_user \
-                        --set auth.password=pass123 \
-                        --set primary.persistence.size=1Gi
-                    """
-                }
-            }
-        }
-
-
         stage('deploy helm') {
             steps {
                 script {
@@ -111,6 +92,24 @@ pipeline {
                     oc create secret generic \${APP_NAME}-app-key \
                     --from-literal=APP_KEY=\$(openssl rand -base64 32) \
                     -n \${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
+                    """
+                }
+            }
+        }
+
+        stage('deploy MySQL') {
+            steps {
+                timeout(time: 30, unit: 'MINUTES') {
+                    sh """
+                    set -x
+                    ./bin/helm pull oci://registry-1.docker.io/bitnamicharts/mysql --version 14.0.3
+                    ./bin/helm upgrade --install ${MYSQL_RELEASE} mysql-14.0.3.tgz \
+                        --namespace ${OCP_NAMESPACE} --create-namespace \
+                        --set auth.rootPassword=admin123 \
+                        --set auth.database=${APP_NAME}_db \
+                        --set auth.username=${APP_NAME}_user \
+                        --set auth.password=pass123 \
+                        --set primary.persistence.size=1Gi
                     """
                 }
             }
