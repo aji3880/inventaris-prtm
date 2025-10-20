@@ -70,15 +70,13 @@ pipeline {
             }
         }
 
-
-       stage('deploy MySQL') {
+        stage('Deploy MySQL') {
             steps {
                 timeout(time: 30, unit: 'MINUTES') {
                     sh """
                     set -x
-                    ./bin/helm repo add bitnami https://charts.bitnami.com/bitnami || true
-                    ./bin/helm repo update
-                    ./bin/helm upgrade --install ${MYSQL_RELEASE} ${MYSQL_CHART} \\
+                    ./bin/helm registry login registry-1.docker.io || true
+                    ./bin/helm upgrade --install ${MYSQL_RELEASE} oci://registry-1.docker.io/bitnamicharts/mysql \\
                         --version ${MYSQL_VERSION} \\
                         --namespace ${OCP_NAMESPACE} --create-namespace \\
                         --set auth.rootPassword=admin123 \\
@@ -90,8 +88,6 @@ pipeline {
                 }
             }
         }
-
-
 
         stage('deploy helm') {
             steps {
