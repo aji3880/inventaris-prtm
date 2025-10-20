@@ -19,8 +19,7 @@ spec:
         app.kubernetes.io/name: {{ include "inventory-app.name" . }}
     spec:
       # Do not force runAsUser (OpenShift will assign arbitrary UID)
-      securityContext:
-        fsGroup: 1000
+      securityContext: {}
       containers:
         - name: {{ include "inventory-app.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
