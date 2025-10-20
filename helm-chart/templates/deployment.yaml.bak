@@ -1,8 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  # Pastikan nama Deployment selalu sama dengan Release name (misalnya: inventory-app)
-  name: {{ .Release.Name }}
+  name: {{ include "inventory-app.fullname" . | trunc 63 }}
   labels:
     app.kubernetes.io/name: {{ include "inventory-app.name" . }}
     helm.sh/chart: {{ include "inventory-app.chart" . }}
@@ -19,7 +18,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/name: {{ include "inventory-app.name" . }}
     spec:
-      # Tidak perlu runAsUser khusus (OpenShift akan assign UID secara otomatis)
+      # Do not force runAsUser (OpenShift will assign arbitrary UID)
       securityContext:
         fsGroup: 1000
       containers:
@@ -37,7 +36,7 @@ spec:
             - name: APP_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}
+                  name: {{ include "inventory-app.fullname" . }}
                   key: APP_KEY
             - name: DB_CONNECTION
               value: "{{ .Values.env.DB_CONNECTION }}"
@@ -52,7 +51,7 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}
+                  name: {{ include "inventory-app.fullname" . }}
                   key: DB_PASSWORD
             - name: PORT
               value: "{{ .Values.service.targetPort }}"
@@ -77,6 +76,6 @@ spec:
       volumes:
         - name: storage
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-pvc
+            claimName: {{ include "inventory-app.fullname" . }}-pvc
         - name: cache
           emptyDir: {}
