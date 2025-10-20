@@ -135,7 +135,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    oc rollout restart deployment/${APP_NAME} -n ${OCP_NAMESPACE}
+                    oc rollout restart deployment/${APP_NAME}-${APP_NAME} -n ${OCP_NAMESPACE}
                     """
                 }
             }
