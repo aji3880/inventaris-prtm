@@ -1,4 +1,4 @@
-{{- if .Values.ingress.host }}
+{{- if (and .Values.ingress (hasKey .Values.ingress "host") (ne .Values.ingress.host "")) }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -11,9 +11,6 @@ spec:
   port:
     targetPort: http
   tls:
-    insecureEdgeTermininationPolicy: None
+    insecureEdgeTerminationPolicy: None
     termination: edge
-  ingress:
-    enabled: false
-    host: ""
 {{- end }}

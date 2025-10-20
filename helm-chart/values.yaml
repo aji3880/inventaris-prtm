@@ -10,8 +10,8 @@ service:
   port: 8080
   targetPort: 8080
 
-#ingress:
-#  host: inventory-app.example.com
+ingress:
+  host: ""
 #  tls: false
 
 resources:
