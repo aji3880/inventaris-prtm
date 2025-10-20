@@ -104,8 +104,8 @@ pipeline {
 
                     # Buat secret app-key
                     oc create secret generic ${APP_NAME}-app-key \
-                        --from-literal=APP_KEY=\$(openssl rand -base64 32) \
-                        -n ${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
+                    --from-literal=APP_KEY=$(openssl rand -base64 32) \
+                    -n ${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
                     """
                 }
             }
