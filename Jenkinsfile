@@ -57,14 +57,13 @@ pipeline {
                     if ! command -v helm &> /dev/null; then
                         curl -sSL https://get.helm.sh/helm-v3.14.4-linux-amd64.tar.gz -o helm.tar.gz
                         tar -zxvf helm.tar.gz
-                        mkdir -p "\${WORKSPACE}/bin"
-                        mv linux-amd64/helm "\${WORKSPACE}/bin/helm"
-                        chmod +x "\${WORKSPACE}/bin/helm"
-                        export PATH="\$PATH:\${WORKSPACE}/bin"
+                        mkdir -p "${WORKSPACE}/bin"
+                        mv linux-amd64/helm "${WORKSPACE}/bin/helm"
+                        chmod +x "${WORKSPACE}/bin/helm"
                     else
                         echo "Helm is already installed"
                     fi
-                    "\${WORKSPACE}/bin/helm" version
+                    "${WORKSPACE}/bin/helm" version
                     """
                 }
             }
@@ -75,14 +74,14 @@ pipeline {
                 script {
                     sh """
                     echo "Helm binary path: ${HELM_BIN}"
-                    ls -l ${WORKSPACE}/bin || true
-                    ${HELM_BIN} version
+                    ls -l "${WORKSPACE}/bin" || true
+                    "${HELM_BIN}" version
 
                     # Jalankan lint
-                    ${HELM_BIN} lint ./helm-chart
+                    "${HELM_BIN}" lint ./helm-chart
 
                     # Deploy aplikasi via Helm
-                    ${HELM_BIN} upgrade --install ${APP_NAME} ./helm-chart \
+                    "${HELM_BIN}" upgrade --install ${APP_NAME} ./helm-chart \
                         --namespace ${OCP_NAMESPACE} --create-namespace \
                         --set serviceAccount.create=true \
                         --set image.repository=${IMAGE_REPO} \
@@ -93,7 +92,7 @@ pipeline {
                         --set env.DB_PASSWORD=pass123
 
                     # Render manifest untuk verifikasi
-                    ${HELM_BIN} template ${APP_NAME} ./helm-chart \
+                    "${HELM_BIN}" template ${APP_NAME} ./helm-chart \
                         --namespace ${OCP_NAMESPACE} \
                         --set image.repository=${IMAGE_REPO} \
                         --set image.tag=${IMAGE_TAG} > rendered.yaml
@@ -111,6 +110,7 @@ pipeline {
                 }
             }
         }
+
 
 
         stage('deploy MySQL') {
