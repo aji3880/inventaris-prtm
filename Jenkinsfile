@@ -71,9 +71,9 @@ pipeline {
         }
 
 
-       stage('Deploy MySQL') {
+       stage('deploy MySQL') {
             steps {
-                timeout(time: 30, unit: 'MINUTES') { // tambah batas waktu
+                timeout(time: 30, unit: 'MINUTES') {
                     sh '''
                     set -x
                     ${HELM_BIN} repo add bitnami https://charts.bitnami.com/bitnami || true
@@ -90,6 +90,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('deploy helm') {
             steps {
