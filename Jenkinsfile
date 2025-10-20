@@ -75,14 +75,13 @@ pipeline {
                 timeout(time: 30, unit: 'MINUTES') {
                     sh """
                     set -x
-                    # Tidak perlu login, chart ini publik
-                    ./bin/helm pull oci://registry-1.docker.io/bitnamicharts/mysql --version 12.5.1
-                    ./bin/helm upgrade --install ${MYSQL_RELEASE} mysql-12.5.1.tgz \\
-                        --namespace ${OCP_NAMESPACE} --create-namespace \\
-                        --set auth.rootPassword=admin123 \\
-                        --set auth.database=${APP_NAME}_db \\
-                        --set auth.username=${APP_NAME}_user \\
-                        --set auth.password=pass123 \\
+                    ./bin/helm pull oci://registry-1.docker.io/bitnamicharts/mysql --version 14.0.3
+                    ./bin/helm upgrade --install ${MYSQL_RELEASE} mysql-14.0.3.tgz \
+                        --namespace ${OCP_NAMESPACE} --create-namespace \
+                        --set auth.rootPassword=admin123 \
+                        --set auth.database=${APP_NAME}_db \
+                        --set auth.username=${APP_NAME}_user \
+                        --set auth.password=pass123 \
                         --set primary.persistence.size=1Gi
                     """
                 }
