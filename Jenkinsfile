@@ -5,7 +5,7 @@ pipeline {
         OCP_NAMESPACE = "inventaris-barang"
         APP_NAME      = "inventory-app"
         IMAGE_TAG     = "0.0.1"
-        OCP_NAME      = "https://api.cluster-twb92.dynamic.redhatworkshops.io:6443"
+        OCP_NAME      = "https://api.cluster-f4k2h.dynamic.redhatworkshops.io:6443"
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
@@ -23,7 +23,7 @@ pipeline {
 
         stage('login ocp') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'ocp-cred', usernameVariable: 'OCP_USER', passwordVariable: 'OCP_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'ocp-crd', usernameVariable: 'OCP_USER', passwordVariable: 'OCP_PASS')]) {
                     sh """
                     oc login -u ${OCP_USER} -p ${OCP_PASS} --server=${OCP_NAME} --insecure-skip-tls-verify=true
                     if ! oc get project ${OCP_NAMESPACE} >/dev/null 2>&1; then
