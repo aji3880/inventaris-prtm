@@ -13,4 +13,7 @@ spec:
   tls:
     insecureEdgeTermininationPolicy: None
     termination: edge
+  ingress:
+    enabled: false
+    host: ""
 {{- end }}
