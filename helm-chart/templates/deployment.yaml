@@ -43,7 +43,7 @@ spec:
             - name: DB_HOST
               value: "{{ .Values.env.DB_HOST }}"
             - name: DB_PORT
-              value: "{{ printf \"%d\" .Values.env.DB_PORT }}"
+              value: '{{ printf "%d" .Values.env.DB_PORT }}'
             - name: DB_DATABASE
               value: "{{ .Values.env.DB_DATABASE }}"
             - name: DB_USERNAME
