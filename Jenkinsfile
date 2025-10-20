@@ -70,14 +70,14 @@ pipeline {
             }
         }
 
-        stage('Deploy MySQL') {
+        stage('deploy MySQL') {
             steps {
                 timeout(time: 30, unit: 'MINUTES') {
                     sh """
                     set -x
-                    ./bin/helm registry login registry-1.docker.io || true
-                    ./bin/helm upgrade --install ${MYSQL_RELEASE} oci://registry-1.docker.io/bitnamicharts/mysql \\
-                        --version ${MYSQL_VERSION} \\
+                    # Tidak perlu login, chart ini publik
+                    ./bin/helm pull oci://registry-1.docker.io/bitnamicharts/mysql --version 12.5.1
+                    ./bin/helm upgrade --install ${MYSQL_RELEASE} mysql-12.5.1.tgz \\
                         --namespace ${OCP_NAMESPACE} --create-namespace \\
                         --set auth.rootPassword=admin123 \\
                         --set auth.database=${APP_NAME}_db \\
@@ -88,6 +88,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('deploy helm') {
             steps {
