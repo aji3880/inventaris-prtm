@@ -120,8 +120,8 @@ pipeline {
                 timeout(time: 30, unit: 'MINUTES') {
                     sh """
                     set -x
-                    ./bin/helm pull oci://registry-1.docker.io/bitnamicharts/mysql --version 14.0.3
-                    ./bin/helm upgrade --install ${MYSQL_RELEASE} mysql-14.0.3.tgz \
+                    ./bin/helm pull oci://registry-1.docker.io/bitnamicharts/mysql --version ${MYSQL_VERSION}
+                    ./bin/helm upgrade --install ${MYSQL_RELEASE} mysql-${MYSQL_VERSION}.tgz \
                         --namespace ${OCP_NAMESPACE} --create-namespace \
                         --set auth.rootPassword=admin123 \
                         --set auth.database=${APP_NAME}_db \
