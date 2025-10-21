@@ -18,6 +18,11 @@ route:
   enabled: true
   host: ""
 
+securityContext:
+  fsGroup: 1000     # UID grup yang punya akses tulis ke storage
+  runAsUser: 1000   # UID user www-data di container
+
+
 resources:
   limits: {}
   requests: {}
