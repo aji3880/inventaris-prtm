@@ -20,9 +20,19 @@ spec:
     spec:
       # Do not force runAsUser (OpenShift will assign arbitrary UID)
       securityContext:
-        {{- toYaml .Values.securityContext | nindent 8 }}
+        runAsNonRoot: true        # Pod level, semua container harus non-root
+        runAsUser: 33             # UID www-data
+        fsGroup: 33               # Group untuk akses volume
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: {{ include "inventory-app.name" . }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            runAsNonRoot: true
+            runAsUser: 33
           image: "{{ .Values.image.repository }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
