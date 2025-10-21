@@ -31,6 +31,9 @@ COPY --from=builder /app /var/www/html
 
 # Permission fix (OpenShift friendly)
 RUN chown -R www-data:0 /var/www/html && chmod -R g+rwX /var/www/html
+RUN chmod -R g+rwX /var/www/html \
+ && chmod -R g+rwX /var/www/html/storage /var/www/html/bootstrap/cache \
+ && find /var/www/html -type d -exec chmod g+s {} \;
 
 # Copy entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

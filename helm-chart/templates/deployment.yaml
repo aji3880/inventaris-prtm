@@ -20,9 +20,7 @@ spec:
     spec:
       # Do not force runAsUser (OpenShift will assign arbitrary UID)
       securityContext:
-        runAsNonRoot: true        # Pod level, semua container harus non-root
-        runAsUser: 33             # UID www-data
-        fsGroup: 33               # Group untuk akses volume
+        runAsNonRoot: true             # Group untuk akses volume
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -32,7 +30,6 @@ spec:
             capabilities:
               drop: ["ALL"]
             runAsNonRoot: true
-            runAsUser: 33
           image: "{{ .Values.image.repository }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -84,5 +81,7 @@ spec:
         - name: storage
           persistentVolumeClaim:
             claimName: '{{ include "inventory-app.fullname" . }}-pvc'
+          securityContext:
+            fsGroupChangePolicy: "OnRootMismatch"
         - name: cache
           emptyDir: {}
