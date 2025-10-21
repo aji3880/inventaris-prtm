@@ -4,7 +4,7 @@ pipeline {
     environment {
         OCP_NAMESPACE = "inventaris-barang"
         APP_NAME      = "inventory-app"
-        IMAGE_TAG     = "0.0.1"
+        IMAGE_TAG     = "latest"
         OCP_NAME      = "https://api.cluster-f4k2h.dynamic.redhatworkshops.io:6443"
         HELM_CHART_PATH = "helm-chart/"
         HELM_BIN        = "${WORKSPACE}/bin/helm"
