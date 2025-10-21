@@ -31,6 +31,10 @@ RUN chmod -R g=u /var/www/html
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod -R g+rwX /var/www/html && \
+    chown -R www-data:0 /var/www/html
+USER 1001
+
 
 ENV PORT=${APACHE_RUN_PORT}
 EXPOSE ${APACHE_RUN_PORT}
