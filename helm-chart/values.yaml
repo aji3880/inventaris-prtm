@@ -14,6 +14,10 @@ ingress:
   host: ""
 #  tls: false
 
+route:
+  enabled: true
+  host: ""
+
 resources:
   limits: {}
   requests: {}
