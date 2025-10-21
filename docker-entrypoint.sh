@@ -1,25 +1,22 @@
 #!/bin/bash
 set -e
 
-# Generate .env from environment variables if not exists
+echo "Generating .env file from environment variables..."
+
+# Pastikan direktori ada
+mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Buat .env hanya jika belum ada
 if [ ! -f /var/www/html/.env ]; then
-  echo "Generating .env file from environment variables..."
-  env | grep -E '^(APP_|DB_|MAIL_|REDIS_|CACHE_|QUEUE_)' > /var/www/html/.env
-fi
-
-# Jangan paksa chown kalau tidak punya izin
-if [ -w /var/www/html/.env ]; then
-  chown www-data:www-data /var/www/html/.env || true
+  echo "Creating .env file..."
+  {
+    # Ambil semua variabel yang diawali APP_ atau DB_ dari Jenkins
+    env | grep -E '^(APP_|DB_|CACHE_|QUEUE_|MAIL_|REDIS_)' || true
+  } > /var/www/html/.env
 else
-  echo "Skip chown: insufficient permission on .env"
+  echo ".env already exists, skipping generation."
 fi
 
-# Laravel permissions (writeable dirs)
-if [ -w /var/www/html/storage ]; then
-  chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
-fi
-
-# Jalankan migrasi otomatis opsional
-# php artisan migrate --force || true
-
+# Jangan ubah ownership atau permission — OpenShift tidak izinkan
+# Jalankan Apache
 exec "$@"
