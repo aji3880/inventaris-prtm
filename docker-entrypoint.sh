@@ -4,7 +4,7 @@ set -e
 # Pastikan folder yang dibutuhkan punya permission benar
 if [ -d /var/www/html ]; then
   mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache
-  chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
+  chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache || true
 fi
 
 # Buat .env hanya jika belum ada
