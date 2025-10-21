@@ -80,13 +80,22 @@ pipeline {
                     # Jalankan lint
                     "${HELM_BIN}" lint ./helm-chart
 
+                    # Buat secret app-key (gunakan single quote agar \$ tidak diinterpretasi Jenkins)
+                    oc create secret generic ${APP_NAME}-app-key \
+                        --from-literal=APP_KEY=\$(openssl rand -hex 32) \
+                        -n ${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
+
                     # Deploy aplikasi via Helm
                     "${HELM_BIN}" upgrade --install ${APP_NAME} ./helm-chart \
                         --namespace ${OCP_NAMESPACE} --create-namespace \
                         --set serviceAccount.create=true \
                         --set image.repository=${IMAGE_REPO} \
                         --set image.tag=${IMAGE_TAG} \
+                        --set env.APP_ENV=production \
+                        --set env.APP_DEBUG=false \
+                        --set env.DB_CONNECTION=mysql \
                         --set env.DB_HOST=${MYSQL_RELEASE}.${OCP_NAMESPACE}.svc.cluster.local \
+                        --set env.DB_PORT=3306 \
                         --set env.DB_DATABASE=${APP_NAME}_db \
                         --set env.DB_USERNAME=${APP_NAME}_user \
                         --set env.DB_PASSWORD=pass123
@@ -101,18 +110,10 @@ pipeline {
 
                     # Apply ke OpenShift
                     oc apply -f rendered.yaml -n ${OCP_NAMESPACE}
-
-                    # Buat secret app-key
-                    oc create secret generic ${APP_NAME}-app-key \
-                    --from-literal=APP_KEY=\$(openssl rand -base64 32) \
-                    -n ${OCP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -
                     """
                 }
             }
         }
-
-
-
 
         stage('deploy MySQL') {
             steps {

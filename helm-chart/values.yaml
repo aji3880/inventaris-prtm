@@ -25,12 +25,13 @@ persistence:
   size: 1Gi
 
 env:
-  APP_ENV:
+  APP_ENV: dev
   APP_DEBUG: "false"
-  APP_KEY:
-  DB_CONNECTION:
-  DB_HOST:
-  DB_PORT:
-  DB_DATABASE:
-  DB_USERNAME:
-  DB_PASSWORD:
+  APP_KEY: ""
+  DB_CONNECTION: mysql
+  DB_HOST: ""
+  DB_PORT: "3306"
+  DB_DATABASE: ""
+  DB_USERNAME: ""
+  DB_PASSWORD: ""
+
