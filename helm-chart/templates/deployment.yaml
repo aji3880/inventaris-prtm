@@ -22,7 +22,7 @@ spec:
       securityContext: {}
       containers:
         - name: {{ include "inventory-app.name" . }}
-          image: "{{ .Values.image.repository }}:latest"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}

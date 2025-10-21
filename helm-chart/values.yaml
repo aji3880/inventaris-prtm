@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: image-registry.openshift-image-registry.svc:5000/inventaris-barang/inventory-app
-  tag: "0.0.1"
+  tag: "latest"
   pullPolicy: Always
 
 service:
@@ -25,12 +25,12 @@ persistence:
   size: 1Gi
 
 env:
-  APP_ENV: production
+  APP_ENV:
   APP_DEBUG: "false"
-  APP_KEY: "base64:$(openssl rand -base64 32)"
-  DB_CONNECTION: mysql
-  DB_HOST: mysql
-  DB_PORT: 3306
-  DB_DATABASE: inventory
-  DB_USERNAME: user
-  DB_PASSWORD: pass
+  APP_KEY:
+  DB_CONNECTION:
+  DB_HOST:
+  DB_PORT:
+  DB_DATABASE:
+  DB_USERNAME:
+  DB_PASSWORD:
