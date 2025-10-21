@@ -36,6 +36,7 @@ RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
  && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod -R g=u /var/www/html
 
 ENV PORT=${APACHE_RUN_PORT}
 EXPOSE ${APACHE_RUN_PORT}
